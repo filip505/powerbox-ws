@@ -1,0 +1,198 @@
+.app {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.connection {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.connection input {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px 15px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.connection input:focus {
+  outline: none;
+  border-color: #4a90d9;
+}
+
+.connection input:disabled {
+  background: #f5f5f5;
+}
+
+.connection button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.connection .connect {
+  background: #4a90d9;
+  color: white;
+}
+
+.connection .connect:hover {
+  background: #3a7bc8;
+}
+
+.connection .disconnect {
+  background: #e74c3c;
+  color: white;
+}
+
+.connection .disconnect:hover {
+  background: #c0392b;
+}
+
+.status {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status.online {
+  background: #27ae60;
+  color: white;
+}
+
+.status.offline {
+  background: #95a5a6;
+  color: white;
+}
+
+.commands {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.cmd-btn {
+  padding: 20px 15px;
+  border: 3px solid var(--btn-color);
+  border-radius: 12px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.cmd-btn:hover:not(:disabled) {
+  background: var(--btn-color);
+  color: white;
+  transform: scale(1.02);
+}
+
+.cmd-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.cmd-btn.active {
+  background: var(--btn-color);
+  color: white;
+}
+
+.cmd-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.cmd-label {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.cmd-desc {
+  font-size: 11px;
+  font-family: monospace;
+  opacity: 0.8;
+}
+
+.broadcasting {
+  background: #27ae60;
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 15px;
+  font-weight: 600;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.stop-btn {
+  grid-column: span 2;
+}
+
+.info {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  text-align: center;
+}
+
+.info p {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}
+
+@media (prefers-color-scheme: dark) {
+  .app {
+    background: #1a1a1a;
+  }
+
+  h1 {
+    color: #fff;
+  }
+
+  .cmd-btn {
+    background: #2a2a2a;
+    color: #fff;
+  }
+
+  .connection input {
+    background: #2a2a2a;
+    border-color: #3a3a3a;
+    color: #fff;
+  }
+
+  .info {
+    background: #2a2a2a;
+    border-color: #3a3a3a;
+  }
+
+  .info p {
+    color: #aaa;
+  }
+}
