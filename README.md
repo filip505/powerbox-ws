@@ -8,9 +8,8 @@ This project reverse-engineers the BLE protocol used by the Power Box TF01 Andro
 
 ## Hardware
 
-- **Power Box TF01 "A Series"** - Building block motor controller with 2 motor channels
+- **Power Box TF01 "A Series"** - Building block motor controller with 4 motors (2 channels)
 - **Raspberry Pi** (with built-in Bluetooth) - Sends BLE advertising packets
-- **Motors**: 2 physical motors, each with 2 speeds (A/C and B/D) and forward/reverse control
 
 ## Protocol
 
@@ -25,18 +24,26 @@ Header (8 bytes)     Control (8 bytes)           Checksum (2 bytes)
 
 ### Motor Control Bytes
 
-| Byte | Neutral | Range | Effect |
-|------|---------|-------|--------|
-| AB   | 0xb8    | 0xb8 → 0xf8 | Motor 1 forward |
-| AB   | 0xb8    | 0xb8 → 0x08 | Motor 1 reverse |
-| CD   | 0x51    | 0x51 → 0xf1 | Motor 2 forward |
-| CD   | 0x51    | 0x51 → 0x01 | Motor 2 reverse |
+| Byte | Neutral | Range         | Motors        |
+|------|---------|---------------|---------------|
+| AB   | 0xb8    | 0x08 → 0xf8  | Motors A & B  |
+| CD   | 0x51    | 0x01 → 0xf1  | Motors C & D  |
 
-The Power Box has 2 physical motors, each with 2 speeds and 2 directions = 8 commands:
-- **Motor 1 (AB byte)**: A = slow speed, C = fast speed
-- **Motor 2 (CD byte)**: B = slow speed, D = fast speed
+- Speed is proportional to distance from neutral — larger deviation = faster
+- Motors A and B share the AB byte; C and D share the CD byte
 
-Speed is controlled by distance from neutral value.
+### Captured Motor Commands (from Android app BLE log, 2026-03-18)
+
+| Motor | Direction | AB byte | CD byte |
+|-------|-----------|---------|---------|
+| A     | front     | 0x48    | 0x51    |
+| A     | back      | 0xc8    | 0x51    |
+| B     | front     | 0xb6    | 0x51    |
+| B     | back      | 0xbf    | 0x51    |
+| C     | front     | 0xb8    | 0xa1    |
+| C     | back      | 0xb8    | 0x21    |
+| D     | front     | 0xb8    | 0x5d    |
+| D     | back      | 0xb8    | 0x55    |
 
 ### Wake-up Packet
 
@@ -68,6 +75,8 @@ sudo ./venv/bin/python server.py --port 8765
 
 ## Web Interface
 
+4 motor sliders (A, B, C, D), each from -100 to +100. Center = stopped. The value controls speed and direction — positive and negative correspond to opposite directions.
+
 ### Start Development Server
 
 ```bash
@@ -91,10 +100,10 @@ Connect to `ws://<pi-ip>:8765`
 
 **Set motors (starts continuous broadcasting):**
 ```json
-{"cmd": "set", "ab": 100, "cd": 0}
+{"cmd": "set", "ab": 75, "cd": -50}
 ```
-- `ab`: Motor 1 speed/direction (-100 to 100). Positive=forward, negative=reverse. Higher abs value=faster.
-- `cd`: Motor 2 speed/direction (-100 to 100). Positive=forward, negative=reverse. Higher abs value=faster.
+- `ab`: AB channel (-100 to 100). Controls motors A & B. Higher absolute value = faster.
+- `cd`: CD channel (-100 to 100). Controls motors C & D. Higher absolute value = faster.
 
 **Stop all motors:**
 ```json
@@ -109,7 +118,7 @@ Connect to `ws://<pi-ip>:8765`
 ### Responses
 
 ```json
-{"status": "ok", "ab": 100, "cd": 0, "broadcasting": true}
+{"status": "ok", "ab": 75, "cd": -50, "broadcasting": true}
 ```
 
 ## Files
@@ -128,6 +137,6 @@ powerbox-ws/
 
 ## Notes
 
-- The Power Box goes to sleep after inactivity - wake-up packet is sent automatically when a client connects
-- Checksum algorithm is unknown - using lookup table of captured valid packets
+- The Power Box goes to sleep after inactivity — send WAKE before first command
+- Checksum algorithm is unknown — using lookup table of captured valid packets
 - Motors stop automatically if all WebSocket clients disconnect
