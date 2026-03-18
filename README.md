@@ -10,7 +10,7 @@ This project reverse-engineers the BLE protocol used by the Power Box TF01 Andro
 
 - **Power Box TF01 "A Series"** - Building block motor controller with 2 motor channels
 - **Raspberry Pi** (with built-in Bluetooth) - Sends BLE advertising packets
-- **Motors**: 2 motors (A and C) with forward/reverse control
+- **Motors**: 2 physical motors, each with 2 speeds (A/C and B/D) and forward/reverse control
 
 ## Protocol
 
@@ -25,10 +25,18 @@ Header (8 bytes)     Control (8 bytes)           Checksum (2 bytes)
 
 ### Motor Control Bytes
 
-| Byte | Neutral | Forward | Reverse | Controls |
-|------|---------|---------|---------|----------|
-| AB   | 0xb8    | 0xf8    | 0x48    | Motor A  |
-| CD   | 0x51    | 0xf1    | 0x11    | Motor C  |
+| Byte | Neutral | Range | Effect |
+|------|---------|-------|--------|
+| AB   | 0xb8    | 0xb8 → 0xf8 | Motor 1 forward |
+| AB   | 0xb8    | 0xb8 → 0x08 | Motor 1 reverse |
+| CD   | 0x51    | 0x51 → 0xf1 | Motor 2 forward |
+| CD   | 0x51    | 0x51 → 0x01 | Motor 2 reverse |
+
+The Power Box has 2 physical motors, each with 2 speeds and 2 directions = 8 commands:
+- **Motor 1 (AB byte)**: A = slow speed, C = fast speed
+- **Motor 2 (CD byte)**: B = slow speed, D = fast speed
+
+Speed is controlled by distance from neutral value.
 
 ### Wake-up Packet
 
@@ -85,8 +93,8 @@ Connect to `ws://<pi-ip>:8765`
 ```json
 {"cmd": "set", "ab": 100, "cd": 0}
 ```
-- `ab`: Motor A value (-100 to 100)
-- `cd`: Motor C value (-100 to 100)
+- `ab`: Motor 1 speed/direction (-100 to 100). Positive=forward, negative=reverse. Higher abs value=faster.
+- `cd`: Motor 2 speed/direction (-100 to 100). Positive=forward, negative=reverse. Higher abs value=faster.
 
 **Stop all motors:**
 ```json

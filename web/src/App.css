@@ -82,24 +82,22 @@ h1 {
   color: white;
 }
 
-.commands {
+.top-controls {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .cmd-btn {
-  padding: 20px 15px;
+  padding: 15px;
   border: 3px solid var(--btn-color);
   border-radius: 12px;
   background: white;
   cursor: pointer;
   transition: all 0.15s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
 }
 
 .cmd-btn:hover:not(:disabled) {
@@ -112,25 +110,75 @@ h1 {
   transform: scale(0.98);
 }
 
-.cmd-btn.active {
-  background: var(--btn-color);
-  color: white;
-}
-
 .cmd-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
 
-.cmd-label {
-  font-size: 20px;
-  font-weight: 700;
+.motor-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
-.cmd-desc {
+.motor-control {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 12px;
+  border: 1px solid #e9ecef;
+}
+
+.motor-name {
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.motor-sub {
   font-size: 11px;
-  font-family: monospace;
-  opacity: 0.8;
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+.motor-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.dir-btn {
+  flex: 1;
+  padding: 15px 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: white;
+  border: 2px solid var(--btn-color);
+  color: var(--btn-color);
+}
+
+.dir-btn:hover:not(:disabled) {
+  background: var(--btn-color);
+  color: white;
+  transform: scale(1.02);
+}
+
+.dir-btn.active {
+  background: var(--btn-color);
+  color: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.dir-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.dir-btn:active:not(:disabled) {
+  transform: scale(0.95);
 }
 
 .broadcasting {
@@ -149,9 +197,6 @@ h1 {
   50% { opacity: 0.7; }
 }
 
-.stop-btn {
-  grid-column: span 2;
-}
 
 .info {
   background: #f8f9fa;
@@ -176,15 +221,19 @@ h1 {
     color: #fff;
   }
 
-  .cmd-btn {
+  .cmd-btn, .dir-btn {
     background: #2a2a2a;
-    color: #fff;
   }
 
   .connection input {
     background: #2a2a2a;
     border-color: #3a3a3a;
     color: #fff;
+  }
+
+  .motor-control {
+    background: #2a2a2a;
+    border-color: #3a3a3a;
   }
 
   .info {
