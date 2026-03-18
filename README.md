@@ -2,6 +2,8 @@
 
 Control Power Box TF01 "A Series" building block motor controller via Bluetooth from a Raspberry Pi.
 
+![Power Box TF01 A Series](power-box.png)
+
 ## Overview
 
 This project reverse-engineers the BLE protocol used by the Power Box TF01 Android app and provides a WebSocket server for remote motor control.
